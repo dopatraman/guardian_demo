@@ -4,13 +4,26 @@ defmodule GuardianDemoWeb.SessionController do
   # alias Api.Auth.Guardian
   alias GuardianDemo.Repo
   alias GuardianDemo.User.Schema, as: UserSchema
+  alias GuardianDemo.Guardian
 
   def login(conn, %{"user" => %{"username" => username, "password" => password}}) do
-    {:ok, _} =
-      get_user_by_username(username)
+    get_user_by_username(username)
       |> check_password(password)
+      |> sign_in(conn)
+  end
 
-    json(conn, :ok)
+  defp sign_in({:ok, user}, conn) do
+    conn = Guardian.Plug.sign_in(conn, user)
+    token = Guardian.Plug.current_token(conn)
+
+    conn
+    |> put_resp_header("authorization", "Bearer #{token}")
+    |> json(:ok)
+  end
+
+  defp sign_in({:error, _}, conn) do
+    put_status(conn, 401)
+    |> json(:error)
   end
 
   defp get_user_by_username(username) do

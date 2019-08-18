@@ -8,8 +8,8 @@ defmodule GuardianDemoWeb.SessionController do
 
   def login(conn, %{"user" => %{"username" => username, "password" => password}}) do
     get_user_by_username(username)
-      |> check_password(password)
-      |> sign_in(conn)
+    |> check_password(password)
+    |> sign_in(conn)
   end
 
   defp sign_in({:ok, user}, conn) do

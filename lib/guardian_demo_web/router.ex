@@ -1,6 +1,14 @@
 defmodule GuardianDemoWeb.Router do
   use GuardianDemoWeb, :router
 
+  pipeline :verify_auth do
+    plug GuardianDemo.VerifyAuthPipeline
+  end
+
+  pipeline :protected do
+    plug Guardian.Plug.EnsureAuthenticated
+  end
+
   pipeline :browser do
     plug :accepts, ["html"]
     plug :fetch_session
@@ -23,6 +31,11 @@ defmodule GuardianDemoWeb.Router do
     pipe_through :api
 
     post "/login", SessionController, :login
+  end
+
+  scope "/", GuardianDemoWeb do
+    pipe_through [:verify_auth, :protected]
+
     post "/private", PrivateController, :my_path
   end
 

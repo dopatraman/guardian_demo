@@ -63,4 +63,27 @@ defmodule GuardianDemoWeb.PrivateControllerTest do
     )
     |> json_response(401)
   end
+
+  @tag authenticate: false
+  test "unauthenticated request followed by authenticated request", %{conn: conn} do
+    post(
+      conn,
+      Routes.private_path(Endpoint, :my_path, %{
+        "foo" => "bar"
+      })
+    )
+    |> json_response(401)
+
+    raw_password = "pwnage"
+    user = insert(:user, password: Bcrypt.hash_pwd_salt(raw_password))
+    conn = add_auth_header(conn, user, raw_password)
+
+    post(
+      conn,
+      Routes.private_path(Endpoint, :my_path, %{
+        "foo" => "bar"
+      })
+    )
+    |> json_response(200)
+  end
 end

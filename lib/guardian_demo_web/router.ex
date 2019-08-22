@@ -30,7 +30,7 @@ defmodule GuardianDemoWeb.Router do
   scope "/", GuardianDemoWeb do
     pipe_through :api
 
-    post "/login", SessionController, :login
+    post "/login", AuthController, :login
   end
 
   scope "/", GuardianDemoWeb do

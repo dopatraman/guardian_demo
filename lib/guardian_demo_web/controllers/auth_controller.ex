@@ -1,4 +1,4 @@
-defmodule GuardianDemoWeb.SessionController do
+defmodule GuardianDemoWeb.AuthController do
   use GuardianDemoWeb, :controller
   import Ecto.Query
   # alias Api.Auth.Guardian

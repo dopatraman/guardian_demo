@@ -1,4 +1,4 @@
-defmodule GuardianDemoWeb.SessionControllerTest do
+defmodule GuardianDemoWeb.AuthControllerTest do
   alias GuardianDemoWeb.Router.Helpers, as: Routes
   alias GuardianDemoWeb.Endpoint
   import GuardianDemo.Test.Factory
@@ -30,7 +30,7 @@ defmodule GuardianDemoWeb.SessionControllerTest do
       conn
       |> put_req_header("content-type", "application/json")
       |> post(
-        Routes.session_path(Endpoint, :login,
+        Routes.auth_path(Endpoint, :login,
           user: %{
             "username" => user.username,
             "password" => bad_raw_password
@@ -41,7 +41,7 @@ defmodule GuardianDemoWeb.SessionControllerTest do
   end
 
   defp login_endpoint(user, password) do
-    Routes.session_path(Endpoint, :login,
+    Routes.auth_path(Endpoint, :login,
       user: %{
         "username" => user.username,
         "password" => password
